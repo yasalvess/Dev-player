@@ -189,3 +189,139 @@ body{
     border-radius: var(--border-radius);
     background-color: var(--color-white);
 }
+
+.slider{
+    --shadow-opacity: 1;
+
+    z-index: 0;
+    /* flex-shrink impede que o elemento encolha se o container flexivel tiver pouco espaço */
+    flex-shrink: 0; 
+    /* em é uma unidade relativa ao tamanho da fonte do elemento */
+    height: 7.125em;
+    position: relative;
+    border-radius: inherit;
+    transition: var(--duration) height var(--ease-timeline);
+}
+
+.slider.resize{
+    --shadow-opacity: 0;
+
+    height: var(--musicplayer-height);
+}
+
+.slider::after{
+    top: 0;
+    left: 0;
+    right: 0;
+    /* cria um pseudo-elemento vazio, o content é necessário para a exibição dos pseudo-elementos before e after */
+    content: "";
+    width: 100%;
+    z-index: -1;
+    height: 100%;
+    position: absolute;
+    /* faz com que o pseudo-elemento não responda a eventos como cliques e hovers */
+    pointer-events: none;
+    border-radius: inherit;
+    box-shadow: var(--box-shadow);
+    opacity: var(--shadow-opacity);
+    transition: var(--duration) opacity;
+}
+
+.slider__content{
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    border-radius: inherit;
+    width: var(--cover-size);
+    height: var(--cover-size);
+    transition: transform, width, height;
+    transition-duration:var(--duration);
+    transition-timing-function: var(--ease-timeline);
+    transform: translate3d(var(--offset-cover), var(--offset-cover), 0);
+}
+
+.slider.resize .slider__content{
+    width: 100%;
+    height: 17.8125em;
+    transform: translate3d(0, 0, 0);
+}
+
+.slider__content .button{
+    --size: 3em;
+
+    z-index: 1;
+    position: absolute;
+    width: var(--size);
+    height: var(--size);
+}
+
+.slider__content i {
+    position: absolute;
+    pointer-events: none;
+    font-size: var(--size);
+}
+
+.music-player__playlist-button{
+    top: 5.5%;
+    left: 5.5%;
+    transform: scale(0);
+    transition: calc(var(--duration) / 2) transform;
+}
+
+.slider.resize .music-player__playlist-button{
+    transform: scale(1);
+    transition: 0.35 var(--duration) transform cubic-bezier(0, 0.85, 0.11, 1.64);
+}
+
+.music-player__broadcast-guarantor .icon-pause, 
+.music-player__broadcast-guarantor.click .icon-play{
+    opacity: 0;
+}
+
+.music-player__broadcast-guarantor.click .icon-play{
+    opacity: 1;
+}
+
+.slider__imgs{
+    width: 100%;
+    height: 100%;
+    filter: brightness(75%);
+    transform: translate3d(calc(var(--indez) * 100%), 0, 0);
+    transition: var(--duration) transform var(--ease-slider);
+}
+
+.slider__imgs > img{
+    pointer-events: none;
+}
+
+.slider__controls{
+    --controls-y: 145%;
+    --controls-x: 17.3%;
+    --controls-width: 68.4%;
+    --controls-resize-width: 88%;
+
+    gap: 0.375em 0;
+    flex-wrap: wrap;
+    position: absolute;
+    align-items: center;
+    padding-top: 0.375em;
+    width: var(--controls-width);
+    transform: translate3d(var(--controls-x), 0 , 0);
+    animation: var(--controls-animate, " game" ) var(--duration)
+        var(--ease--timeline) forwards;
+}
+
+@keyframes down{
+    100%{
+        width: var(--controls-resize-width);
+        transform: translate3d(0, var(--controls-y), 0);
+    }
+}
+
+@keyframes up{
+    0%{
+        width: var(--controls-resize-width);
+        transform: translate3d(0, var(--controls-y), 0);
+    }
+}
